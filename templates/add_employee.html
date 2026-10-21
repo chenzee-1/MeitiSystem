@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-body">
+                <h3 class="mb-4">Add New Employee</h3>
+                <form method="POST">
+                    <div class="mb-3">
+                        <label>Name</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Department</label>
+                        <input type="text" name="department" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Hourly Wage ($)</label>
+                        <input type="number" step="0.1" name="hourly_wage" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Save Employee</button>
+                    <a href="/employees" class="btn btn-secondary">Cancel</a >
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

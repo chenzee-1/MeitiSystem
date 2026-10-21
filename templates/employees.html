@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Employee List</h2>
+    
+{% if session.get('role') == 'HR' %}
+    <a href="/add_employee" class="btn btn-primary">+ Add Employee</a>
+{% endif %}
+</div>
+
+<form method="GET" action="/employees" class="mb-3 d-flex gap-2">
+    <input type="text" name="search" placeholder="Search by name..." class="form-control w-25">
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+<table class="table table-striped table-hover bg-white shadow-sm">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Hourly Wage</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for emp in employees %}
+        <tr>
+            <td>{{ emp['id'] }}</td>
+            <td>{{ emp['name'] }}</td>
+            <td>{{ emp['department'] }}</td>
+            <td>${{ emp['hourly_wage'] }}</td>
+            <td>
+                <!-- 删除功能 -->
+                 <a href="/edit_employee/{{ emp['id'] }}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="/delete_employee/{{ emp['id'] }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a >
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5" class="text-center">No employees found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

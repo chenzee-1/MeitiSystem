@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-body">
+                <h3 class="mb-4">Edit Employee</h3>
+                <form method="POST">
+                    <div class="mb-3">
+                        <label>Name</label>
+                        <!-- value="{{ emp['name'] }}" 会自动把原来的数据填进去 -->
+                        <input type="text" name="name" class="form-control" value="{{ emp['name'] }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Department</label>
+                        <input type="text" name="department" class="form-control" value="{{ emp['department'] }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Hourly Wage ($)</label>
+                        <input type="number" step="0.1" name="hourly_wage" class="form-control" value="{{ emp['hourly_wage'] }}" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Employee</button>
+                    <a href="/employees" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
