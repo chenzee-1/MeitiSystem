@@ -165,13 +165,19 @@ def delete_employee(id):
 def schedule():
     if 'user_id' not in session:
         return redirect(url_for('login'))
+    
     conn = get_db()
-    # 关联查询：把员工名字也查出来
+    # 1. 查出所有员工，传给前端做下拉菜单
+    employees = conn.execute("SELECT * FROM employees").fetchall()
+    
+    # 2. 查出排班表
     schedules = conn.execute('''SELECT s.id, e.name, s.date, s.shift_type 
                                 FROM schedules s 
                                 JOIN employees e ON s.employee_id = e.id''').fetchall()
     conn.close()
-    return render_template('schedule.html', schedules=schedules)
+    
+    # 3. 把 employees 也一并传过去
+    return render_template('schedule.html', schedules=schedules, employees=employees)
     # 在 app.py 里补充这个路由
 @app.route('/add_schedule', methods=['POST'])
 def add_schedule():

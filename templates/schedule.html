@@ -4,7 +4,12 @@
 <!-- 加在 schedule.html 的 <h2> 下面 -->
 <form action="/add_schedule" method="POST" class="mb-3 d-flex gap-2">
     <!-- 这里的下拉框你们最好用 Jinja2 循环把 employees 传过来，或者直接写死演示 -->
-    <input type="text" name="employee_id" placeholder="Employee ID" required class="form-control w-25">
+    <select name="employee_id" class="form-control w-25" required>
+        <option value="">-- Select Employee --</option>
+        {% for emp in employees %}
+            <option value="{{ emp['id'] }}">{{ emp['name'] }} (ID: {{ emp['id'] }})</option>
+        {% endfor %}
+    </select>
     <input type="date" name="date" required class="form-control w-25">
     <select name="shift_type" class="form-control w-25">
         <option value="Morning">Morning</option>
