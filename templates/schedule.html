@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-<h2 class="mb-3">Store Schedule</h2>
+<!-- <h2 class="mb-3">Store Schedule</h2> -->
+ <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Store Schedule</h2>
+    <a href="/export_schedule" class="btn btn-success">Export to CSV</a>
+</div>
 <!-- 加在 schedule.html 的 <h2> 下面 -->
 <form action="/add_schedule" method="POST" class="mb-3 d-flex gap-2">
     <!-- 这里的下拉框你们最好用 Jinja2 循环把 employees 传过来，或者直接写死演示 -->
