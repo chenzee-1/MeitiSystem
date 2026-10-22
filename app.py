@@ -1,3 +1,5 @@
+import csv
+import io
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import sqlite3
 import os
@@ -179,6 +181,36 @@ def schedule():
     # 3. 把 employees 也一并传过去
     return render_template('schedule.html', schedules=schedules, employees=employees)
     # 在 app.py 里补充这个路由
+@app.route('/export_schedule')
+def export_schedule():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    conn = get_db()
+    # 查出全店排班
+    schedules = conn.execute('''SELECT e.name, s.date, s.shift_type 
+                                FROM schedules s 
+                                JOIN employees e ON s.employee_id = e.id''').fetchall()
+    conn.close()
+
+    # 创建一个内存中的文本流
+    si = io.StringIO()
+    cw = csv.writer(si)
+    
+    # 写入表头
+    cw.writerow(['Employee Name', 'Date', 'Shift Type'])
+    
+    # 写入数据
+    for row in schedules:
+        cw.writerow([row['name'], row['date'], row['shift_type']])
+    
+    # 准备返回响应（让浏览器下载）
+    output = si.getvalue()
+    return app.response_class(
+        output,
+        mimetype='text/csv',
+        headers={"Content-Disposition": "attachment;filename=store_schedule.csv"}
+    )
 @app.route('/add_schedule', methods=['POST'])
 def add_schedule():
     if 'user_id' not in session:
