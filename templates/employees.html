@@ -31,6 +31,7 @@
             <td>${{ emp['hourly_wage'] }}</td>
             <td>
                 <!-- 删除功能 -->
+                 <a href="/view_employee/{{ emp['id'] }}" class="btn btn-sm btn-info text-white">View</a>
                  <a href="/edit_employee/{{ emp['id'] }}" class="btn btn-sm btn-warning">Edit</a>
                 <a href="/delete_employee/{{ emp['id'] }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a >
             </td>

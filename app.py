@@ -120,6 +120,24 @@ def add_employee():
         return redirect(url_for('employees'))
         
     return render_template('add_employee.html')
+@app.route('/view_employee/<int:id>')
+def view_employee(id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    conn = get_db()
+    # 把该员工的信息查出来
+    emp = conn.execute("SELECT * FROM employees WHERE id = ?", (id,)).fetchone()
+    
+    # 顺便查一下他的排班情况（显得更专业）
+    schedules = conn.execute("SELECT * FROM schedules WHERE employee_id = ?", (id,)).fetchall()
+    conn.close()
+    
+    if not emp:
+        flash('员工不存在', 'danger')
+        return redirect(url_for('employees'))
+        
+    return render_template('view_employee.html', emp=emp, schedules=schedules)
 
 # @app.route('/add_employee', methods=['GET', 'POST'])
 # def add_employee():

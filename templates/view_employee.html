@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Employee Details</h4>
+                <a href="/employees" class="btn btn-sm btn-light">Back to List</a>
+            </div>
+            <div class="card-body">
+                <!-- 纯只读展示 -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p><strong>Employee ID:</strong> {{ emp['id'] }}</p>
+                        <p><strong>Name:</strong> {{ emp['name'] }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Department:</strong> {{ emp['department'] }}</p>
+                        <p><strong>Hourly Wage:</strong> ${{ emp['hourly_wage'] }}</p>
+                    </div>
+                </div>
+
+                <hr>
+                <h5 class="mt-4">Assigned Shifts</h5>
+                <table class="table table-sm table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Date</th>
+                            <th>Shift Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in schedules %}
+                        <tr>
+                            <td>{{ s['date'] }}</td>
+                            <td>{{ s['shift_type'] }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="2" class="text-center text-muted">No shifts assigned yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
