@@ -96,15 +96,39 @@ def employees():
         emps = conn.execute("SELECT * FROM employees").fetchall()
     conn.close()
     return render_template('employees.html', employees=emps)
-
 @app.route('/add_employee', methods=['GET', 'POST'])
 def add_employee():
     if 'user_id' not in session:
         return redirect(url_for('login'))
-        
+    
     if session.get('role') != 'HR':
         flash('权限不足：只有 HR 可以添加员工！', 'danger')
         return redirect(url_for('dashboard'))
+
+    # 👇 下面是你缺失的代码 👇
+    if request.method == 'POST':
+        name = request.form['name']
+        dept = request.form['department']
+        wage = request.form['hourly_wage']
+        
+        conn = get_db()
+        conn.execute("INSERT INTO employees (name, department, hourly_wage) VALUES (?, ?, ?)", (name, dept, wage))
+        conn.commit()
+        conn.close()
+        
+        flash('员工添加成功！', 'success')
+        return redirect(url_for('employees'))
+        
+    return render_template('add_employee.html')
+
+# @app.route('/add_employee', methods=['GET', 'POST'])
+# def add_employee():
+#     if 'user_id' not in session:
+#         return redirect(url_for('login'))
+        
+#     if session.get('role') != 'HR':
+#         flash('权限不足：只有 HR 可以添加员工！', 'danger')
+#         return redirect(url_for('dashboard'))
 
 @app.route('/edit_employee/<int:id>', methods=['GET', 'POST'])
 def edit_employee(id):
@@ -140,47 +164,7 @@ def delete_employee(id):
     conn.close()
     flash('员工已删除', 'warning')
     return redirect(url_for('employees'))
-# @app.route('/edit_employee/<int:id>', methods=['GET', 'POST'])
-# def edit_employee(id):
-#     if 'user_id' not in session:
-#         return redirect(url_for('login'))
-    
-#     conn = get_db()
-#     if request.method == 'POST':
-#         # 接收修改后的数据
-#         name = request.form['name']
-#         dept = request.form['department']
-#         wage = request.form['hourly_wage']
-        
-#         # 更新数据库
-#         conn.execute("UPDATE employees SET name=?, department=?, hourly_wage=? WHERE id=?", (name, dept, wage, id))
-#         conn.commit()
-#         conn.close()
-#         flash('员工信息修改成功！', 'success')
-#         return redirect(url_for('employees'))
-    
-#     # 如果是 GET 请求，把当前员工的信息查出来传给页面
-#     emp = conn.execute("SELECT * FROM employees WHERE id = ?", (id,)).fetchone()
-#     conn.close()
-#     return render_template('edit_employee.html', emp=emp)
-# @app.route('/schedule')
-# def schedule():
-#     if 'user_id' not in session:
-#         return redirect(url_for('login'))
-    
-#     conn = get_db()
-#     # 1. 查出所有员工，传给前端做下拉菜单
-#     employees = conn.execute("SELECT * FROM employees").fetchall()
-    
-#     # 2. 查出排班表
-#     schedules = conn.execute('''SELECT s.id, e.name, s.date, s.shift_type 
-#                                 FROM schedules s 
-#                                 JOIN employees e ON s.employee_id = e.id''').fetchall()
-#     conn.close()
-    
-#     # 3. 把 employees 也一并传过去
-#     return render_template('schedule.html', schedules=schedules, employees=employees)
-#     # 在 app.py 里补充这个路由
+
 @app.route('/schedule')
 def schedule():
     if 'user_id' not in session:
