@@ -288,4 +288,5 @@ def change_password():
 if __name__ == '__main__':
     init_db() # 运行前自动建表
     app.run(debug=True, port=5000)
-    
+
+    ＃ zzz
